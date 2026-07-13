@@ -1,11 +1,11 @@
 {
 	"name": "vscode-scriptmonkey",
 	"displayName": "Scriptmonkey",
-	"description": "Userscript language support for vscode.",
+	"description": "UserScript language support for VS Code.",
 	"icon": "images/icon.png",
-	"version": "0.1.0",
-	"repository": "https://github.com/andywang425/vscode-scriptmonkey",
-	"publisher": "andywang",
+	"version": "0.1.1",
+	"repository": "https://github.com/rapjul/vscode-userscript",
+	"publisher": "rapjul",
 	"engines": {
 		"vscode": "^1.86.0"
 	},
@@ -13,7 +13,7 @@
 		"Programming Languages"
 	],
 	"keywords": [
-		"userscript",
+		"UserScript",
 		"Tampermonkey",
 		"Greasemonkey",
 		"Violentmonkey"
