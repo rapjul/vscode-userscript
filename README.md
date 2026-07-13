@@ -1,19 +1,20 @@
 # Scriptmonkey
 
-A simple userscript language support extension which provides syntax highlight, completion, hover, and code snippets.
+A simple UserScript language support extension which provides syntax highlight, completion, hover, and code snippets.
 
-Most features of Scriptmonkey activates only when filename ends with `.user.js` by default to prevent polluting non userscript files.
-You can modify the extension settings to make Scriptmonkey work in other javascript files.
+Most features of Scriptmonkey activates only when filename ends with `.user.js` by default to prevent polluting non-UserScript JavaScript files.
+
+You can modify the extension settings to make Scriptmonkey work in other JavaScript files.
 
 ## Features
 
-### Syntax highlight
+### Syntax Highlight
 
 - **Metadata**
 
 ![Metadata highlight](images/metadata.png)
 
-- **Css in GM_addstyle**
+- **CSS in GM_addstyle**
 
 ![GM_addstyle highlight](images/GM_addstyle.png)
 
@@ -33,7 +34,7 @@ You can modify the extension settings to make Scriptmonkey work in other javascr
 
 ### Code Snippets
 
-Type `userscript` to generate a userscript template. You can modify the default values of some meta data keys in the extension settings.
+Type `userscript` to generate a UserScript template. You can modify the default values of some metadata keys in the extension settings.
 
 ![Code Snippets](images/code_snippets.gif)
 
