@@ -216,19 +216,20 @@ function createCompletionItemProvider(
         let prefix_word_position = position
 
         if (prefix?.endsWith('.')) {
-          for (let i = 0; i < Number(process.env.GM_ITEMS_DEPTH) - 1; i++) {
+          const depth = Number(process.env.GM_ITEMS_DEPTH || 5)
+          for (let i = 0; i < depth - 1; i++) {
             const wordAndPosition = getWord(document, prefix_word_position, false)
             if (wordAndPosition) {
               let [word, pos] = wordAndPosition
 
-              if (word.startsWith('GM_')) {
+              if (word.toUpperCase().startsWith('GM_')) {
                 word = `GM.${word.substring(3)}`
                 i++
               }
 
               prefix_words = `${word}.` + prefix_words
 
-              if (prefix_words === prefix) {
+              if (prefix_words.toLowerCase() === prefix.toLowerCase()) {
                 matched_prefix = true
                 break
               } else {
