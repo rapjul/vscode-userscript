@@ -5,6 +5,7 @@ import buildMarkdownString from '../utils/buildMarkdownString'
 import { GMItem } from '../items/types'
 import getWord from '../utils/getWord'
 
+/** List of registered VS Code completion item disposable providers */
 const completionProviders: vscode.Disposable[] = []
 
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -299,7 +300,9 @@ function createDirectiveValueCompletionProvider(): void {
         const textBeforeCursor = lineText.substring(0, position.character)
 
         // Match line like: // @run-at       or // @grant
-        const match = textBeforeCursor.match(/^\s*\/\/\s*@([a-zA-Z0-9_-]+)(?::[a-zA-Z0-9_-]+)?\s+(.*)$/)
+        const match = textBeforeCursor.match(
+          /^\s*\/\/\s*@([a-zA-Z0-9_-]+)(?::[a-zA-Z0-9_-]+)?\s+(.*)$/
+        )
         if (!match) {
           return
         }

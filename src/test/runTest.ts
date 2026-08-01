@@ -2,7 +2,12 @@ import * as path from 'path'
 
 import { runTests } from '@vscode/test-electron'
 
-async function main() {
+/**
+ * Downloads VS Code test instance and executes the integration test suite.
+ *
+ * @returns A Promise resolving when tests finish running.
+ */
+async function main(): Promise<void> {
   try {
     // The folder containing the Extension Manifest package.json
     // Passed to `--extensionDevelopmentPath`

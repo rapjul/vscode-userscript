@@ -1,5 +1,10 @@
 require('mocha/mocha')
 
+/**
+ * Configures and runs the Mocha test suite for Web / Browser VS Code environment.
+ *
+ * @returns A Promise that resolves on successful test execution or rejects on failure.
+ */
 export function run(): Promise<void> {
   // Create the mocha test
 

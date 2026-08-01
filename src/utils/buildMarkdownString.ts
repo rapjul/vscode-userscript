@@ -1,7 +1,16 @@
 import * as vscode from 'vscode'
-import { GMItem } from '../items/types'
+import { GMItem, MarkDownItem } from '../items/types'
 
-function appendContentToMarkdownString(markdownString: vscode.MarkdownString, content: any): void {
+/**
+ * Appends a section of content (code block, markdown text, or plain text) to a vscode.MarkdownString instance.
+ *
+ * @param markdownString - The MarkdownString instance to append to.
+ * @param content - The MarkDownItem specifying the content type and string value.
+ */
+function appendContentToMarkdownString(
+  markdownString: vscode.MarkdownString,
+  content: MarkDownItem
+): void {
   switch (content.add) {
     case 'code':
       markdownString.appendCodeblock(content.value, 'typescript')
@@ -15,6 +24,12 @@ function appendContentToMarkdownString(markdownString: vscode.MarkdownString, co
   }
 }
 
+/**
+ * Constructs a vscode.MarkdownString representing the full documentation and type definition of a GMItem.
+ *
+ * @param item - The GMItem to generate Markdown documentation for.
+ * @returns A vscode.MarkdownString populated with type definition and documentation sections.
+ */
 function buildMarkdownString(item: GMItem): vscode.MarkdownString {
   const markdownString = new vscode.MarkdownString()
 

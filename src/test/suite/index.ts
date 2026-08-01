@@ -2,6 +2,11 @@ import * as path from 'path'
 import * as Mocha from 'mocha'
 import { globSync } from 'glob'
 
+/**
+ * Configures and runs the Mocha test suite for Desktop VS Code environment.
+ *
+ * @returns A Promise that resolves on successful test execution or rejects on failure.
+ */
 export function run(): Promise<void> {
   // Create the mocha test
   // @ts-ignore

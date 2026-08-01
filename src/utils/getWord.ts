@@ -1,5 +1,13 @@
 import * as vscode from 'vscode'
 
+/**
+ * Scans backward from a position to locate the start position of the next word token preceding a dot accessor.
+ *
+ * @param document - The VS Code TextDocument.
+ * @param position - The current cursor position.
+ * @param isInWord - Whether the cursor is currently positioned inside a word.
+ * @returns The next vscode.Position to inspect, or undefined if no preceding token is found.
+ */
 function findNextPosition(
   document: vscode.TextDocument,
   position: vscode.Position,

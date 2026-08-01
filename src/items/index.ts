@@ -1,14 +1,16 @@
 import * as vscode from 'vscode'
-import { GMItem } from './types'
+import { GMItem, MetaDataDefault } from './types'
 
 const config = vscode.workspace.getConfiguration('scriptmonkey.metaData.default')
 
-const metaDataDefault = {
-  author: config.get('author'),
-  namespace: config.get('namespace'),
-  icon: config.get('icon')
+/** Default metadata values configured in workspace settings for user script snippets */
+const metaDataDefault: MetaDataDefault = {
+  author: config.get<string>('author'),
+  namespace: config.get<string>('namespace'),
+  icon: config.get<string>('icon')
 }
 
+/** Comprehensive list of supported UserScript metadata items and Greasemonkey/Tampermonkey APIs */
 const items: GMItem[] = [
   {
     label: 'unsafeWindow',
@@ -1158,8 +1160,7 @@ interface GMXmlHttpRequestResponse {
             value: 'Decide in which environment/context the script will run.'
           }
         ],
-        insertText:
-          'run-in ${1|main-thread,sub-frame,all-frames|}'
+        insertText: 'run-in ${1|main-thread,sub-frame,all-frames|}'
       },
       {
         label: 'tag',

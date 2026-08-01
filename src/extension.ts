@@ -6,9 +6,13 @@ import { hoverProviders } from './providers/HoverProviders'
 import { GMItem } from './items/types'
 import allItems from './items'
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+/**
+ * Activates the Scriptmonkey extension.
+ * Calculates maximum item nesting depth and registers completion & hover providers.
+ *
+ * @param context - The VS Code extension context.
+ */
+export function activate(context: vscode.ExtensionContext): void {
   process.env['GM_ITEMS_DEPTH'] = (function search(items: GMItem[]): number {
     const list = items.map((item) => {
       if (item.subItems) {
@@ -24,5 +28,10 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(...completionProviders, ...hoverProviders)
 }
 
-// this method is called when your extension is deactivated
-export function deactivate() {}
+/**
+ * Deactivates the Scriptmonkey extension.
+ *
+ * Cleanup is handled automatically by VS Code disposing of all items registered
+ * in `context.subscriptions`, so no explicit teardown logic is required here.
+ */
+export function deactivate(): void {}

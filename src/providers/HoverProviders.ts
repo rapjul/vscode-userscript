@@ -6,6 +6,7 @@ import { GMItem } from '../items/types'
 import getWord from '../utils/getWord'
 import findGMItem from '../utils/findGMItem'
 
+/** List of registered VS Code hover provider disposables */
 const hoverProviders: vscode.Disposable[] = []
 
 /**

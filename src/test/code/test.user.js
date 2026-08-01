@@ -55,7 +55,7 @@
   GM.xmlHttpRequest
   GM_download
   GM_getTabs
-    GM.setClipboard
+  GM.setClipboard
   GM_webRequest
 
   GM_cookie.list
