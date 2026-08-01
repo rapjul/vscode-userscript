@@ -59,6 +59,12 @@ const webExtensionConfig = {
     maxAssetSize: 512000,
     maxEntrypointSize: 512000
   },
+  ignoreWarnings: [
+    {
+      module: /mocha\/mocha\.js$/,
+      message: /Critical dependency: the request of a dependency is an expression/
+    }
+  ],
   devtool: 'nosources-source-map' // Create a source map that points to the original source file
 };
 module.exports = [webExtensionConfig];
