@@ -1,5 +1,5 @@
 {
-    "$schema": "./tmlanguage.json",
+    "$schema": "./tmlanguage.schema.json",
     "scopeName": "text.userjs",
     "fileTypes": [
         "user.js"
