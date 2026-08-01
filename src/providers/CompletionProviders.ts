@@ -7,20 +7,112 @@ import getWord from '../utils/getWord'
 
 const completionProviders: vscode.Disposable[] = []
 
+/* eslint-disable @typescript-eslint/naming-convention */
+/** Map of directive names to allowed completion values */
+const DIRECTIVE_VALUES_MAP: Record<string, string[]> = {
+  'run-at': ['document-start', 'document-body', 'document-end', 'document-idle', 'context-menu'],
+  'run-in': ['main-thread', 'sub-frame', 'all-frames'],
+  sandbox: ['raw', 'JavaScript', 'DOM', 'MAIN_WORLD', 'ISOLATED_WORLD', 'USERSCRIPT_WORLD'],
+  antifeature: ['ads', 'tracking', 'miner'],
+  license: [
+    'AGPL-3.0-only',
+    'AGPL-3.0-or-later',
+    'GPL-2.0-only',
+    'GPL-2.0-or-later',
+    'GPL-3.0-only',
+    'GPL-3.0-or-later',
+    'LGPL-2.0-only',
+    'LGPL-2.0-or-later',
+    'LGPL-2.1-only',
+    'LGPL-2.1-or-later',
+    'LGPL-3.0-only',
+    'LGPL-3.0-or-later',
+    'MIT',
+    'Unlicense'
+  ],
+  compatible: ['firefox', 'chrome', 'opera', 'safari', 'edge'],
+  incompatible: ['firefox', 'chrome', 'opera', 'safari', 'edge'],
+  grant: [
+    'none',
+    'unsafeWindow',
+    'window.onurlchange',
+    'window.close',
+    'window.focus',
+    'GM_addElement',
+    'GM.addElement',
+    'GM_addStyle',
+    'GM.addStyle',
+    'GM_download',
+    'GM.download',
+    'GM_getResourceText',
+    'GM.getResourceText',
+    'GM_getResourceURL',
+    'GM.getResourceURL',
+    'GM_info',
+    'GM.info',
+    'GM_log',
+    'GM.log',
+    'GM_notification',
+    'GM.notification',
+    'GM_openInTab',
+    'GM.openInTab',
+    'GM_registerMenuCommand',
+    'GM.registerMenuCommand',
+    'GM_unregisterMenuCommand',
+    'GM.unregisterMenuCommand',
+    'GM_setClipboard',
+    'GM.setClipboard',
+    'GM_getTab',
+    'GM.getTab',
+    'GM_saveTab',
+    'GM.saveTab',
+    'GM_getTabs',
+    'GM.getTabs',
+    'GM_setValue',
+    'GM.setValue',
+    'GM_getValue',
+    'GM.getValue',
+    'GM_deleteValue',
+    'GM.deleteValue',
+    'GM_listValues',
+    'GM.listValues',
+    'GM_setValues',
+    'GM.setValues',
+    'GM_getValues',
+    'GM.getValues',
+    'GM_deleteValues',
+    'GM.deleteValues',
+    'GM_addValueChangeListener',
+    'GM.addValueChangeListener',
+    'GM_removeValueChangeListener',
+    'GM.removeValueChangeListener',
+    'GM_xmlhttpRequest',
+    'GM.xmlHttpRequest',
+    'GM_webRequest',
+    'GM.webRequest',
+    'GM_cookie',
+    'GM.cookie',
+    'GM_audio',
+    'GM.audio'
+  ]
+}
+/* eslint-enable @typescript-eslint/naming-convention */
+
 /**
- * Make a completion item
- * @param item GM item
- * @param prefix The prefix of the GM item, examples: `@name` (@ is prefix), `GM.info` (GM. is prefix)
- * @param isGM_ Is it a GM_ function? Example: GM_addStyle
- * @param position The position invoked completion
- * @returns
+ * Creates a completion item for a GM item.
+ *
+ * @param item - The GM item definition.
+ * @param prefix - Prefix string (e.g., `@` or `GM.`).
+ * @param isGM_ - Flag indicating if this is a legacy `GM_` function.
+ * @param position - The current cursor position.
+ * @returns A configured vscode.CompletionItem.
  */
 function makeCompletionItem(
   item: GMItem,
   prefix: string | undefined,
   isGM_: boolean,
   position: vscode.Position
-) {
+): vscode.CompletionItem {
   let label = item.label!
 
   if (prefix === '@') {
@@ -84,10 +176,30 @@ function makeCompletionItem(
   return completionItem
 }
 
-function createCompletionItemProvider(items: GMItem[], prefix?: string, commitCharacter?: string) {
+/**
+ * Creates and registers completion providers for GM items and metadata keys.
+ *
+ * @param items - List of GMItems.
+ * @param prefix - Accumulated prefix.
+ * @param commitCharacter - Optional trigger/commit character.
+ */
+function createCompletionItemProvider(
+  items: GMItem[],
+  prefix?: string,
+  commitCharacter?: string
+): void {
   const provider = vscode.languages.registerCompletionItemProvider(
     'javascript',
     {
+      /**
+       * Provides completion items for GM APIs and metadata keys.
+       *
+       * @param document - Text document.
+       * @param position - Current position.
+       * @param token - Cancellation token.
+       * @param context - Completion context.
+       * @returns Array of completion items or undefined.
+       */
       provideCompletionItems(
         document: vscode.TextDocument,
         position: vscode.Position,
@@ -164,6 +276,55 @@ function createCompletionItemProvider(items: GMItem[], prefix?: string, commitCh
   }
 }
 
+/**
+ * Creates and registers a completion provider for UserScript directive values after whitespace.
+ */
+function createDirectiveValueCompletionProvider(): void {
+  const provider = vscode.languages.registerCompletionItemProvider(
+    'javascript',
+    {
+      /**
+       * Provides completion items for directive values when positioned after whitespace on a directive line.
+       *
+       * @param document - Text document.
+       * @param position - Current position.
+       * @returns Array of completion items or undefined.
+       */
+      provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+        if (!checkIfShouldRun(document)) {
+          return
+        }
+
+        const lineText = document.lineAt(position.line).text
+        const textBeforeCursor = lineText.substring(0, position.character)
+
+        // Match line like: // @run-at       or // @grant
+        const match = textBeforeCursor.match(/^\s*\/\/\s*@([a-zA-Z0-9_-]+)(?::[a-zA-Z0-9_-]+)?\s+(.*)$/)
+        if (!match) {
+          return
+        }
+
+        const directiveName = match[1]
+        const allowedValues = DIRECTIVE_VALUES_MAP[directiveName]
+        if (!allowedValues) {
+          return
+        }
+
+        return allowedValues.map((val) => {
+          const item = new vscode.CompletionItem(val, vscode.CompletionItemKind.Value)
+          item.detail = 'UserScript directive value'
+          item.sortText = ' '
+          return item
+        })
+      }
+    },
+    ' '
+  )
+
+  completionProviders.push(provider)
+}
+
 createCompletionItemProvider(allItems)
+createDirectiveValueCompletionProvider()
 
 export { completionProviders }

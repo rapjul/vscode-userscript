@@ -8,6 +8,16 @@ import findGMItem from '../utils/findGMItem'
 
 const hoverProviders: vscode.Disposable[] = []
 
+/**
+ * Attempts to resolve a hover object for GM items or API tokens at a position.
+ *
+ * @param document - The VS Code TextDocument.
+ * @param position - The current cursor position.
+ * @param word_list - Accumulator list for path tokens.
+ * @param items - The GMItem list to search.
+ * @param isInWord - Whether the position is currently inside a word.
+ * @returns A vscode.Hover object if matched, a next search Position, or undefined.
+ */
 function makeHoverObject(
   document: vscode.TextDocument,
   position: vscode.Position,
@@ -42,8 +52,21 @@ function makeHoverObject(
   }
 }
 
-function createHoverProvider(items: GMItem[]) {
+/**
+ * Creates and registers a hover provider for UserScript metadata directives and GM APIs.
+ *
+ * @param items - List of GMItems containing API definitions and metadata items.
+ */
+function createHoverProvider(items: GMItem[]): void {
   const provider = vscode.languages.registerHoverProvider('javascript', {
+    /**
+     * Provides hover documentation for UserScript metadata directives and GM functions.
+     *
+     * @param document - The active text document.
+     * @param position - The hover position.
+     * @param token - Cancellation token.
+     * @returns A Hover object or undefined.
+     */
     provideHover(
       document: vscode.TextDocument,
       position: vscode.Position,
@@ -53,8 +76,18 @@ function createHoverProvider(items: GMItem[]) {
         return
       }
 
-      const word_list: string[] = []
+      // Check if current line is a metadata comment directive line (e.g. // @run-at       document-start)
+      const lineText = document.lineAt(position.line).text
+      const metaMatch = lineText.match(/^\s*\/\/\s*@([a-zA-Z0-9_-]+)(?::[a-zA-Z0-9_-]+)?/)
+      if (metaMatch) {
+        const directiveName = metaMatch[1]
+        const item = findGMItem(items, [directiveName])
+        if (item) {
+          return new vscode.Hover(buildMarkdownString(item))
+        }
+      }
 
+      const word_list: string[] = []
       let pos = position
 
       for (let i = 0; i < Number(process.env.GM_ITEMS_DEPTH); i++) {

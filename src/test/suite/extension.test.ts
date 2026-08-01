@@ -4,7 +4,8 @@ import * as assert from 'assert'
 // as well as import your extension to test it
 import * as vscode from 'vscode'
 import checkIfShouldRun from '../../utils/checkIfShouldRun'
-// import * as myExtension from '../../extension';
+import findGMItem from '../../utils/findGMItem'
+import allItems from '../../items'
 
 suite('Extension Test Suite', () => {
   vscode.window.showInformationMessage('Start all tests.')
@@ -52,5 +53,34 @@ suite('Extension Test Suite', () => {
     } as unknown as vscode.TextDocument
 
     assert.strictEqual(checkIfShouldRun(mockDocWithoutHeader), false)
+  })
+
+  test('findGMItem resolves metadata directives with leading @ and locale suffixes', () => {
+    /** Test finding @run-at */
+    const runAtItem = findGMItem(allItems, ['run-at'])
+    assert.ok(runAtItem)
+    assert.strictEqual(runAtItem?.label, 'run-at')
+
+    /** Test finding @grant with leading @ */
+    const grantItem = findGMItem(allItems, ['@grant'])
+    assert.ok(grantItem)
+    assert.strictEqual(grantItem?.label, 'grant')
+
+    /** Test finding localized @name:de directive */
+    const nameItem = findGMItem(allItems, ['@name:de'])
+    assert.ok(nameItem)
+    assert.strictEqual(nameItem?.label, 'name')
+
+    /** Test finding @run-in directive */
+    const runInItem = findGMItem(allItems, ['@run-in'])
+    assert.ok(runInItem)
+    assert.strictEqual(runInItem?.label, 'run-in')
+  })
+
+  test('findGMItem resolves nested GM object methods', () => {
+    /** Test finding GM.cookie.list */
+    const cookieListItem = findGMItem(allItems, ['GM', 'cookie', 'list'])
+    assert.ok(cookieListItem)
+    assert.strictEqual(cookieListItem?.label, 'list')
   })
 })

@@ -1149,6 +1149,30 @@ interface GMXmlHttpRequestResponse {
           'run-at ${1|document-start,document-body,document-end,document-idle,context-menu|}'
       },
       {
+        label: 'run-in',
+        kind: vscode.CompletionItemKind.Snippet,
+        detail: 'GM metadata',
+        documentation: [
+          {
+            add: 'markdown',
+            value: 'Decide in which environment/context the script will run.'
+          }
+        ],
+        insertText:
+          'run-in ${1|main-thread,sub-frame,all-frames|}'
+      },
+      {
+        label: 'tag',
+        kind: vscode.CompletionItemKind.Snippet,
+        detail: 'GM metadata',
+        documentation: [
+          {
+            add: 'markdown',
+            value: 'Tags to organize and filter scripts in script lists and management options.'
+          }
+        ]
+      },
+      {
         label: 'grant',
         kind: vscode.CompletionItemKind.Snippet,
         detail: 'GM metadata',
@@ -1160,7 +1184,7 @@ interface GMXmlHttpRequestResponse {
           }
         ],
         insertText:
-          'grant ${1|none,unsafeWindow,window.onurlchange,window.close,window.focus,GM_addElement,GM.addElement,GM_addStyle,GM.addStyle,GM_download,GM.download,GM_getResourceText,GM.getResourceText,GM_getResourceURL,GM.getResourceURL,GM_info,GM.info,GM_log,GM.log,GM_notification,GM.notification,GM_openInTab,GM.openInTab,GM_registerMenuCommand,GM.registerMenuCommand,GM_unregisterMenuCommand,GM.unregisterMenuCommand,GM_setClipboard,GM.setClipboard,GM_getTab,GM.getTab,GM_saveTab,GM.saveTab,GM_getTabs,GM.getTabs,GM_setValue,GM.setValue,GM_getValue,GM.getValue,GM_deleteValue,GM.deleteValue,GM_listValues,GM.listValues,GM_addValueChangeListener,GM.addValueChangeListener,GM_removeValueChangeListener,GM.removeValueChangeListener,GM_xmlhttpRequest,GM.xmlHttpRequest,GM_webRequest,GM.webRequest,GM_cookie,GM.cookie|}'
+          'grant ${1|none,unsafeWindow,window.onurlchange,window.close,window.focus,GM_addElement,GM.addElement,GM_addStyle,GM.addStyle,GM_download,GM.download,GM_getResourceText,GM.getResourceText,GM_getResourceURL,GM.getResourceURL,GM_info,GM.info,GM_log,GM.log,GM_notification,GM.notification,GM_openInTab,GM.openInTab,GM_registerMenuCommand,GM.registerMenuCommand,GM_unregisterMenuCommand,GM.unregisterMenuCommand,GM_setClipboard,GM.setClipboard,GM_getTab,GM.getTab,GM_saveTab,GM.saveTab,GM_getTabs,GM.getTabs,GM_setValue,GM.setValue,GM_getValue,GM.getValue,GM_deleteValue,GM.deleteValue,GM_listValues,GM.listValues,GM_setValues,GM.setValues,GM_getValues,GM.getValues,GM_deleteValues,GM.deleteValues,GM_addValueChangeListener,GM.addValueChangeListener,GM_removeValueChangeListener,GM.removeValueChangeListener,GM_xmlhttpRequest,GM.xmlHttpRequest,GM_webRequest,GM.webRequest,GM_cookie,GM.cookie,GM_audio,GM.audio|}'
       },
       {
         label: 'antifeature',
@@ -1284,7 +1308,7 @@ interface GMXmlHttpRequestResponse {
               '\n- `DOM` Use this access mode if the script only needs DOM and no direct `unsafeWindow` access. If [enabled](https://www.tampermonkey.net/faq#Q404) these scripts are executed inside the extension context, the `ISOLATED_WORLD`, or at any other enabled context otherwise, because they all grant DOM access.\n'
           }
         ],
-        insertText: 'sandbox ${1|raw,JavaScript,DOM|}'
+        insertText: 'sandbox ${1|raw,JavaScript,DOM,MAIN_WORLD,ISOLATED_WORLD,USERSCRIPT_WORLD|}'
       }
     ]
   },
