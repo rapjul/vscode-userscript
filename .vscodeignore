@@ -9,3 +9,7 @@ vsc-extension-quickstart.md
 **/*.map
 **/*.ts
 notes
+.agent/
+_artifacts/
+.specstory/
+.test/
