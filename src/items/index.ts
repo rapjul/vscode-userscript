@@ -1316,16 +1316,16 @@ interface GMXmlHttpRequestResponse {
   {
     label: 'userscript',
     kind: vscode.CompletionItemKind.Snippet,
-    insertText: `\/\/ ==UserScript==
-\/\/ @name         \${1:Script name}
-\/\/ @namespace    \${2:${metaDataDefault.namespace}}
-\/\/ @version      \${3:0.1}
-\/\/ @description  \${4:A brief summary to describe the script}
-\/\/ @author       \${5:${metaDataDefault.author}}
-\/\/ @match        \${6:*://*/*}
-\/\/ @icon         \${7:${metaDataDefault.icon}}
-\/\/ @grant        \${8:none}
-\/\/ ==/UserScript==
+    insertText: `// ==UserScript==
+// @name         \${1:Script name}
+// @namespace    \${2:${metaDataDefault.namespace}}
+// @version      \${3:0.1}
+// @description  \${4:A brief summary to describe the script}
+// @author       \${5:${metaDataDefault.author}}
+// @match        \${6:*://*/*}
+// @icon         \${7:${metaDataDefault.icon}}
+// @grant        \${8:none}
+// ==/UserScript==
 
 (function () {
   'use strict';
