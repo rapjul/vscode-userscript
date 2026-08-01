@@ -71,7 +71,7 @@ function createHoverProvider(items: GMItem[]): void {
     provideHover(
       document: vscode.TextDocument,
       position: vscode.Position,
-      token: vscode.CancellationToken
+      _token: vscode.CancellationToken
     ) {
       if (!checkIfShouldRun(document)) {
         return

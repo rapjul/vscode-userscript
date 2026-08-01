@@ -204,8 +204,8 @@ function createCompletionItemProvider(
       provideCompletionItems(
         document: vscode.TextDocument,
         position: vscode.Position,
-        token: vscode.CancellationToken,
-        context: vscode.CompletionContext
+        _token: vscode.CancellationToken,
+        _context: vscode.CompletionContext
       ) {
         if (!checkIfShouldRun(document)) {
           return
